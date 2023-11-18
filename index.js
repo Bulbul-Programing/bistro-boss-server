@@ -26,6 +26,7 @@ async function run() {
         await client.connect();
         
         const menuCollection = client.db('menuCollection').collection('menu')
+        const reviewCollection = client.db('reviewCollection').collection('review')
 
 
         app.get('/menu/:item', async(req, res)=>{
@@ -33,6 +34,12 @@ async function run() {
             const query = {category: categoryName }
             const cursor = menuCollection.find(query)
             const result =await cursor.toArray()
+            res.send(result)
+        })
+
+        app.get('/review', async(req , res)=>{
+            const cursor = reviewCollection.find()
+            const result = await cursor.toArray()
             res.send(result)
         })
 
