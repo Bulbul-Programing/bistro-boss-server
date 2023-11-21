@@ -9,7 +9,7 @@ app.use(express.json())
 require('dotenv').config()
 
 
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const uri = `mongodb+srv://${process.env.USER}:${process.env.PASSWORD}@cluster0.p7qt4j9.mongodb.net/?retryWrites=true&w=majority`;
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
@@ -54,7 +54,15 @@ async function run() {
 
         app.post('/carts', async(req, res)=>{
             const productData = req.body
+            console.log(productData);
             const result = await cartCollection.insertOne(productData)
+            res.send(result)
+        })
+
+        app.delete('/carts/delete', async(req, res)=>{
+            const deleteId = req.query.id
+            const query = {_id: new ObjectId(deleteId)}
+            const result = await cartCollection.deleteOne(query)
             res.send(result)
         })
 
